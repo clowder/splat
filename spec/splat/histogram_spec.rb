@@ -12,17 +12,28 @@ describe Splat::Histogram do
     it "it configures the instance" do
       histogram = Splat::Histogram.from_image(badge_hq)
       histogram.channels.count.should == 215
+      histogram.type.should == :texture
+    end
+
+    context "when given a particular 'type'" do
+      it "it configures the instance" do
+        histogram = Splat::Histogram.from_image(badge_hq, :type => :red)
+        histogram.channels.count.should == 252
+        histogram.type.should == :red
+      end
     end
   end
 
   describe "#normalize" do
-    it "returns a new object" do
+    it "returns a new object of the same type" do
       histogram = Splat::Histogram.new([])
       histogram.stub(:highest_strength).and_return(100)
 
       normalized_histogram = histogram.normalize
 
       histogram.should_not be_equal(normalized_histogram)
+
+      normalized_histogram.type.should == histogram.type
     end
 
     it "calls #normalize on its channels" do

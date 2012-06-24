@@ -6,14 +6,15 @@ require 'bundler/setup'
 Bundler.require
 
 class Splat
+  autoload :Image,     'splat/image'
   autoload :Histogram, 'splat/histogram'
 
   def self.match(reference, library)
-    reference_histogram = Histogram.from_image(reference)
+    reference = Image.new(reference)
 
     results = library.map do |image|
-      comparison_histogram = Histogram.from_image(image)
-      score = reference_histogram - comparison_histogram
+      comparison = Image.new(image)
+      score = reference - comparison
       [image, score]
     end
 
