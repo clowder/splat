@@ -8,8 +8,8 @@ describe Splat::Histogram do
   let(:london_pride)    { File.expand_path('../../fixtures/london_pride.jpg', __FILE__) }
   let(:barn_door)       { File.expand_path('../../fixtures/barn_door.jpg', __FILE__) }
 
-  describe "#channels" do
-    it "it returns an enumerable containing the channels parsed from the image, plus stubs for the channels in the colorspace we dont have values for" do
+  describe ".from_image" do
+    it "it configures the instance" do
       histogram = Splat::Histogram.from_image(badge_hq)
       histogram.channels.count.should == 215
     end
@@ -109,7 +109,7 @@ describe Splat::Histogram do
 
       channel = histogram['222222']
       channel.color.should == '222222'
-      channel.strength.should == 39671
+      channel.strength.to_i.should == 370
     end
   end
 end

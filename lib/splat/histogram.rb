@@ -26,15 +26,14 @@ class Splat::Histogram
   def -(other)
     score = 0
 
+    # 1/510 * sum((h(x) - y)**2)
     channels.map do |channel|
       other_channel = other[channel.color]
 
       if other_channel
-        # Difference between matching channels (i.e. colors)
-        score += ((channel.strength - other_channel.strength).abs / CHANNEL_STRENGTH_LIMIT)
+        score += (other_channel.strength - channel.strength)**2.0
       else
-        # Add a little more than the full score for non-matching channels
-        score += (channel.strength / CHANNEL_STRENGTH_LIMIT)*2
+        score += (0 - channel.strength)**2.0
       end
     end
 
@@ -42,13 +41,11 @@ class Splat::Histogram
       our_channel = self[channel.color]
 
       unless our_channel
-        # Add a little more than the full score for non-matching channels
-        score += (channel.strength / CHANNEL_STRENGTH_LIMIT)*2
+        score += (channel.strength)**2
       end
     end
 
-    # Divide by total number of colors in the colorspace
-    score = score / 255
+    score = (1.0/510.0) * score
 
     score
   end

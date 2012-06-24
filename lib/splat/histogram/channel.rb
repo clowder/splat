@@ -7,7 +7,7 @@ class Splat::Histogram::Channel
     dataline.strip!
 
     color    = dataline.scan(/#([0-9a-z]*)/i).flatten.first
-    strength = dataline.scan(/(^[0-9]*)/).flatten.first.to_i
+    strength = dataline.scan(/(^[0-9]*)/).flatten.first.to_i.to_f
 
     new(color, strength)
   end
