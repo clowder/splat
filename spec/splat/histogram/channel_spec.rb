@@ -30,30 +30,20 @@ describe Splat::Histogram::Channel do
     end
   end
 
-  describe "#-" do
-    context "within the same color" do
-      it "returns the delta in strength" do
-        channel1 = Splat::Histogram::Channel.new('070707', 320)
-        channel2 = Splat::Histogram::Channel.new('070707', 8)
+  describe "#normalize" do
+    it "returns a new object" do
+      channel = Splat::Histogram::Channel.new('070707', 320)
+      normal_channel = channel.normalize(1)
 
-        result = channel1 - channel2
-
-        result.should == 312
-      end
+      channel.should_not be_equal(normal_channel)
     end
 
-    context "within the different colors" do
-      it "returns the delta in strength" do
-        channel1 = Splat::Histogram::Channel.new('070707', 320)
-        channel2 = Splat::Histogram::Channel.new('0B0B0B', 2048)
+    it "normalized by on the given facter" do
+      channel = Splat::Histogram::Channel.new('070707', 320)
+      normal_channel = channel.normalize(0.5)
 
-        expect {
-          channel1 - channel2
-        }.to raise_error { Splat::Histogram::Channel::InvalidComparison }
-      end
+      normal_channel.strength.should == 160.00
     end
   end
-
-
 end
 
